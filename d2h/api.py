@@ -1,4 +1,4 @@
-from erpnext.accounts.party import get_dashboard_info
+from apps.erpnext.erpnext.accounts.party import get_dashboard_info
 import frappe
 from frappe.model.mapper import get_mapped_doc
 from frappe.utils import today
