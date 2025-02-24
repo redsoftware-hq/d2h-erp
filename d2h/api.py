@@ -172,4 +172,4 @@ def customer_has_balance(customer, sales_order):
         invoice = frappe.get_doc("Sales Invoice", { "name": invoice_item.parent })
         pending_amount = invoice.outstanding_amount
         total = invoice.total
-    return { "balance": info[0]["total_unpaid"], "pending": pending_amount, "total": total }
+    return { "balance": info[0]["total_unpaid"], "pending": pending_amount, "total": total, "info_debug": info }
