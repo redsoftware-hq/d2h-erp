@@ -4,7 +4,7 @@ frappe.ui.form.on("Purchase Receipt", {
       frappe.user_roles.includes("Store Dept") &&
       !frappe.user_roles.includes("Administrator")
     ) {
-      frm.set_df_property("sec_warehouse", "hidden", true);
+      // frm.set_df_property("sec_warehouse", "hidden", true);
       frm.set_df_property("items_section", "hidden", true);
       frm.set_df_property("section_break0", "hidden", true);
       frm.set_df_property("accounting_dimensions_section", "hidden", true);
