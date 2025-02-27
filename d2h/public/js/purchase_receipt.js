@@ -4,7 +4,7 @@ frappe.ui.form.on("Purchase Receipt", {
       frappe.user_roles.includes("Store Dept") &&
       !frappe.user_roles.includes("Administrator")
     ) {
-      // frm.set_df_property("sec_warehouse", "hidden", true);
+      frm.set_df_property("sec_warehouse", "hidden", true);
       frm.set_df_property("items_section", "hidden", true);
       frm.set_df_property("section_break0", "hidden", true);
       frm.set_df_property("accounting_dimensions_section", "hidden", true);
@@ -40,6 +40,10 @@ frappe.ui.form.on("Purchase Receipt", {
         new_item.serial_no = item.serial_no;
         new_item.rejected_qty = item.rejected_qty;
         new_item.purchase_order = item.purchase_order;
+        new_item.serial_and_batch_bundle = item.serial_and_batch_bundle;
+        new_item.rejected_serial_and_batch_bundle =
+          item.rejected_serial_and_batch_bundle;
+        new_item.use_serial_batch_fields = item.use_serial_batch_fields;
       });
       frm.refresh_field("items");
     } else {
@@ -57,6 +61,10 @@ frappe.ui.form.on("Purchase Receipt", {
         new_item.serial_no = item.serial_no;
         new_item.rejected_qty = item.rejected_qty;
         new_item.purchase_order = item.purchase_order;
+        new_item.serial_and_batch_bundle = item.serial_and_batch_bundle;
+        new_item.rejected_serial_and_batch_bundle =
+          item.rejected_serial_and_batch_bundle;
+        new_item.use_serial_batch_fields = item.use_serial_batch_fields;
       });
       frm.refresh_field("custom_item_duplicate");
     }
