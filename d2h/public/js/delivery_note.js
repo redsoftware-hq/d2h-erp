@@ -35,6 +35,8 @@ frappe.ui.form.on("Delivery Note", {
         new_item.conversion_factor = item.conversion_factor;
         new_item.stock_qty = item.stock_qty;
         new_item.serial_no = item.serial_no;
+        new_item.serial_and_batch_bundle = item.serial_and_batch_bundle;
+        new_item.use_serial_batch_fields = item.use_serial_batch_fields;
       });
       frm.refresh_field("items");
     } else {
@@ -49,6 +51,8 @@ frappe.ui.form.on("Delivery Note", {
         new_item.conversion_factor = item.conversion_factor;
         new_item.stock_qty = item.stock_qty;
         new_item.serial_no = item.serial_no;
+        new_item.serial_and_batch_bundle = item.serial_and_batch_bundle;
+        new_item.use_serial_batch_fields = item.use_serial_batch_fields;
       });
       frm.refresh_field("custom_delivery_note_item_duplicate");
     }
