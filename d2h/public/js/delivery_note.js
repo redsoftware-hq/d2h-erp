@@ -1,4 +1,23 @@
 frappe.ui.form.on("Delivery Note", {
+  refresh: function (frm) {
+    frm.doc.custom_delivery_note_item_duplicate = [];
+    frm.refresh_field("custom_delivery_note_item_duplicate");
+    frm.doc.items.map((item) => {
+      if (item.item_code) {
+        const new_item = frm.add_child("custom_delivery_note_item_duplicate");
+        new_item.item_code = item.item_code;
+        new_item.qty = item.qty;
+        new_item.uom = item.uom;
+        new_item.stock_uom = item.stock_uom;
+        new_item.conversion_factor = item.conversion_factor;
+        new_item.stock_qty = item.stock_qty;
+        new_item.serial_no = item.serial_no;
+        new_item.serial_and_batch_bundle = item.serial_and_batch_bundle;
+        new_item.use_serial_batch_fields = item.use_serial_batch_fields;
+      }
+    });
+    frm.refresh_field("custom_delivery_note_item_duplicate");
+  },
   onload: function (frm) {
     if (
       frappe.user_roles.includes("Store Dept") &&
