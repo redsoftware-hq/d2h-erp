@@ -228,6 +228,7 @@ fixtures = [
 doc_events = {
     "Purchase Receipt": {
         "on_submit": "d2h.overrides.on_submit_purchase_receipt",
+        "validate": "d2h.overrides.validate_purchase_receipt",
         "on_trash": "d2h.overrides.on_delete_purchase_receipt"
     },
     "*": {
