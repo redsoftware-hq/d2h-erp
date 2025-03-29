@@ -89,7 +89,7 @@ def create_purchase_receipt(purchase_order, items):
         {
             "Purchase Order": {
                 "doctype": "Purchase Receipt",
-                "field_map": {"supplier_warehouse": "supplier_warehouse"},
+                "field_map": {"supplier_warehouse": "supplier_warehouse", "custom_file_no": "custom_file_no"},
                 "validation": {
                     "docstatus": ["=", 1],
                 },
