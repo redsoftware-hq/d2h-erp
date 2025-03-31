@@ -229,7 +229,8 @@ doc_events = {
     "Purchase Receipt": {
         "on_submit": "d2h.overrides.on_submit_purchase_receipt",
         "validate": "d2h.overrides.validate_purchase_receipt",
-        "on_trash": "d2h.overrides.on_delete_purchase_receipt"
+        "on_trash": "d2h.overrides.on_delete_purchase_receipt",
+        "after_insert": "d2h.overrides.after_insert_purchase_receipt"
     },
     "*": {
         "before_print": "d2h.api.before_print"
