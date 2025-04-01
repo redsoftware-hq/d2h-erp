@@ -1,4 +1,26 @@
 frappe.ui.form.on("Purchase Receipt", {
+  refresh: function (frm) {
+    frm.fields_dict["custom_item_duplicate"].grid.wrapper.on(
+      "change",
+      'input[data-fieldname="qty"]',
+      function () {
+        roles = frappe.user_roles;
+        if (roles.includes("Store Dept") && !roles.includes("Administrator")) {
+          frm.doc.custom_item_duplicate.map((item) => {
+            frm.doc.items.map((new_item) => {
+              if (new_item.item_code == item.item_code) {
+                new_item.qty = item.qty;
+                new_item.received_qty = item.qty;
+                new_item.received_stock_qty = item.qty;
+                new_item.stock_qty = item.qty;
+              }
+            });
+          });
+          frm.refresh_field("items");
+        }
+      }
+    );
+  },
   onload: function (frm) {
     if (
       frappe.user_roles.includes("Store Dept") &&
