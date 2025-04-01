@@ -1,3 +1,5 @@
+import json
+from d2h.api import create_purchase_receipt
 import frappe
 
 def on_submit_purchase_receipt(doc, method):
@@ -12,8 +14,30 @@ def on_submit_purchase_receipt(doc, method):
             else:
                 item_order.custom_good_in_transit_qty = 0
             item_order.save(ignore_permissions=True)
+    new_purchase_receipt_required = False
+    new_items = []
+    purchase_order = None
+    for item in doc.items:
+        if item.original_quantity - item.qty > 0:
+            new_purchase_receipt_required = True
+            purchase_order = item.purchase_order
+            item_order = frappe.get_doc("Purchase Order Item", {
+                "item_code": item.item_code,
+                "parent": item.purchase_order
+            })
+            new_items.append({
+                "item_code": item.item_code,
+                "qty": item.original_quantity - item.qty,
+                "uom": item.uom,
+                "item_name": item.item_name,
+                "name": item_order.name,
+            })
+    if new_purchase_receipt_required:
+        create_purchase_receipt(purchase_order, json.dumps(new_items))
 
 def after_insert_purchase_receipt(doc, method):
+    for item in doc.items:
+        item.original_quantity = item.qty
     doc.custom_item_duplicate = []
     for item in doc.items:
         new_item = doc.append("custom_item_duplicate", {})
@@ -30,6 +54,9 @@ def after_insert_purchase_receipt(doc, method):
         new_item.serial_and_batch_bundle = item.serial_and_batch_bundle
         new_item.rejected_serial_and_batch_bundle = item.rejected_serial_and_batch_bundle
         new_item.use_serial_batch_fields = item.use_serial_batch_fields
+        new_item.original_quantity = item.original_quantity
+
+    doc.save(ignore_permissions=True)
 
 def validate_purchase_receipt(doc, method):
     user_roles = frappe.get_roles(frappe.session.user)
@@ -59,6 +86,7 @@ def validate_purchase_receipt(doc, method):
             new_item.serial_and_batch_bundle = item.serial_and_batch_bundle
             new_item.rejected_serial_and_batch_bundle = item.rejected_serial_and_batch_bundle
             new_item.use_serial_batch_fields = item.use_serial_batch_fields
+            new_item.original_quantity = item.original_quantity
 
 def on_delete_purchase_receipt(doc, method):
     on_submit_purchase_receipt(doc, method)

@@ -14,6 +14,7 @@
   "conversion_factor",
   "qty",
   "rejected_qty",
+  "original_quantity",
   "serial_no",
   "purchase_order",
   "serial_and_batch_no_section",
@@ -154,12 +155,20 @@
    "fieldname": "use_serial_batch_fields",
    "fieldtype": "Check",
    "label": "Use Serial No / Batch Fields"
+  },
+  {
+   "default": "0",
+   "fieldname": "original_quantity",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "original_quantity",
+   "non_negative": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-03-16 21:18:58.738406",
+ "modified": "2025-04-01 06:43:07.787928",
  "modified_by": "Administrator",
  "module": "D2H",
  "name": "Purchase Receipt Item Duplicate",

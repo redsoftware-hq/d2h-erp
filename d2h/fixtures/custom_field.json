@@ -988,5 +988,17 @@
         "translatable": 0,
         "unique": 0,
         "width": null
+    },
+    {
+        "doctype": "Custom Field",
+        "dt": "Purchase Receipt Item",
+        "module": "D2H",
+        "name": "original_quantity",
+        "fieldname": "original_quantity",
+        "fieldtype": "Float",
+        "label": "Original Quantity",
+        "default": 0,
+        "hidden": 1,
+        "non_negative": 0
     }
 ]
