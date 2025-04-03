@@ -9,8 +9,8 @@ def on_submit_purchase_receipt(doc, method):
                 "item_code": item.item_code,
                 "parent": item.purchase_order
             })
-            if(item_order.custom_good_in_transit_qty > item.qty):
-                item_order.custom_good_in_transit_qty -= item.qty
+            if(item_order.custom_good_in_transit_qty > item.original_quantity):
+                item_order.custom_good_in_transit_qty -= item.original_quantity
             else:
                 item_order.custom_good_in_transit_qty = 0
             item_order.save(ignore_permissions=True)
