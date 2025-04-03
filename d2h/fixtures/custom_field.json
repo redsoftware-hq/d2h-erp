@@ -1000,5 +1000,17 @@
         "default": 0,
         "hidden": 1,
         "non_negative": 0
+    },
+    {
+        "doctype": "Custom Field",
+        "dt": "Sales Order Item",
+        "module": "D2H",
+        "name": "balance_quantity",
+        "fieldname": "balance_quantity",
+        "fieldtype": "Data",
+        "label": "Balance Quantity",
+        "default": "Unknown",
+        "in_list_view": 1,
+        "read_only": 1
     }
 ]

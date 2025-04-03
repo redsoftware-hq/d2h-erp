@@ -101,6 +101,15 @@ frappe.ui.form.on("Sales Order", {
       $(`[data-label='Status%20%3E%20Hold'].menu-item-label`).parent().hide();
     }, 200);
   },
+  set_warehouse: function (frm) {
+    if (frm.doc.set_warehouse) {
+      if (frm.doc.items.length > 0) {
+        frm.doc.items.map((item) => {
+          update_warehouse_balance(frm, item);
+        });
+      }
+    }
+  },
 });
 
 function show_confirm_dialog(frm) {
@@ -160,4 +169,37 @@ function show_approve_delivery_confirm_dialog(frm, data) {
       frm.save_or_update();
     }
   );
+}
+
+frappe.ui.form.on("Sales Order Item", {
+  item_code: function (frm, cdt, cdn) {
+    let row = locals[cdt][cdn];
+    if (frm.doc.set_warehouse) {
+      if (row.item_code) {
+        update_warehouse_balance(frm, row);
+      }
+    }
+  },
+});
+
+function update_warehouse_balance(frm, row) {
+  frappe.call({
+    method: "erpnext.stock.dashboard.item_dashboard.get_data",
+    args: {
+      item_code: row.item_code,
+      start: 0,
+    },
+    callback: function (r) {
+      if (r.message && r.message.length > 0) {
+        r.message.map((item) => {
+          if (item.warehouse == frm.doc.set_warehouse) {
+            row.balance_quantity = item.actual_qty;
+          } else {
+            row.balance_quantity = "Unknown";
+          }
+        });
+      }
+      frm.refresh_field("items");
+    },
+  });
 }
