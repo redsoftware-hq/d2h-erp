@@ -88,6 +88,17 @@ def validate_purchase_receipt(doc, method):
             new_item.use_serial_batch_fields = item.use_serial_batch_fields
             new_item.original_quantity = item.original_quantity
 
+def validate_delivery_note(doc, method):
+    user_roles = frappe.get_roles(frappe.session.user)
+    if "Store Dept" in user_roles and "Administrator" not in user_roles:
+        for ind in range(len(doc.custom_delivery_note_item_duplicate)):
+            duplicate_item = doc.custom_delivery_note_item_duplicate[ind]
+            item = doc.items[ind]
+            if duplicate_item.item_code == item.item_code:
+                item.qty = duplicate_item.qty
+                item.serial_and_batch_bundle = duplicate_item.serial_and_batch_bundle
+                item.use_serial_batch_fields = duplicate_item.use_serial_batch_fields
+
 def on_delete_purchase_receipt(doc, method):
     on_submit_purchase_receipt(doc, method)
 

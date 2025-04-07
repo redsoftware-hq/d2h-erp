@@ -232,6 +232,9 @@ doc_events = {
         "on_trash": "d2h.overrides.on_delete_purchase_receipt",
         "after_insert": "d2h.overrides.after_insert_purchase_receipt"
     },
+    "Delivery Note": {
+        "validate": "d2h.overrides.validate_delivery_note",
+    },
     "*": {
         "before_print": "d2h.api.before_print"
     }
