@@ -18,11 +18,40 @@ frappe.ui.form.on("Delivery Note", {
       }
     );
     if (
-      frm.doc.items &&
-      frm.doc.custom_delivery_note_item_duplicate &&
-      frm.doc.items.length != frm.doc.custom_delivery_note_item_duplicate.length
+      frappe.user_roles.includes("Store Dept") &&
+      !frappe.user_roles.includes("Administrator")
     ) {
-      update_duplicate_items(frm);
+      if (
+        frm.doc.items &&
+        frm.doc.custom_delivery_note_item_duplicate &&
+        !compareListsByKey(
+          frm.doc.items,
+          frm.doc.custom_delivery_note_item_duplicate,
+          "item_code"
+        )
+      ) {
+        update_duplicate_items(frm);
+      }
+    }
+  },
+  validate(frm) {
+    if (
+      frappe.user_roles.includes("Store Dept") &&
+      !frappe.user_roles.includes("Administrator")
+    ) {
+      if (
+        frm.doc.items &&
+        frm.doc.custom_delivery_note_item_duplicate &&
+        frm.doc.custom_delivery_note_item_duplicate.length <
+          frm.doc.items.length
+      ) {
+        const availableIdx = new Set(
+          frm.doc.custom_delivery_note_item_duplicate.map((item) => item.idx)
+        );
+        frm.doc.items = frm.doc.items.filter((item) =>
+          availableIdx.has(item.idx)
+        );
+      }
     }
   },
   onload: function (frm) {
@@ -46,9 +75,6 @@ frappe.ui.form.on("Delivery Note", {
     frm.fields_dict["custom_delivery_note_item_duplicate"].grid.wrapper
       .find(".grid-add-row")
       .hide();
-    frm.fields_dict["custom_delivery_note_item_duplicate"].grid.wrapper
-      .find(".grid-remove-rows")
-      .hide();
 
     frm.fields_dict[
       "custom_delivery_note_item_duplicate"
@@ -58,15 +84,6 @@ frappe.ui.form.on("Delivery Note", {
     ].grid.only_sortable = false;
 
     frm.fields_dict["custom_delivery_note_item_duplicate"].grid.refresh();
-  },
-  validate(frm) {
-    if (
-      frappe.user_roles.includes("Store Dept") &&
-      !frappe.user_roles.includes("Administrator")
-    ) {
-    } else {
-      update_duplicate_items(frm);
-    }
   },
 });
 
@@ -92,4 +109,16 @@ function update_duplicate_items(frm, row) {
     new_item.use_serial_batch_fields = item.use_serial_batch_fields;
   });
   frm.refresh_field("custom_delivery_note_item_duplicate");
+}
+
+function compareListsByKey(list1, list2, key) {
+  if (list1.length !== list2.length) return false;
+
+  for (let i = 0; i < list1.length; i++) {
+    if (list1[i][key] !== list2[i][key]) {
+      return false;
+    }
+  }
+
+  return true;
 }
