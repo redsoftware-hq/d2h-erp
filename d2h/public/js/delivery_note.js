@@ -17,7 +17,13 @@ frappe.ui.form.on("Delivery Note", {
         }
       }
     );
-    update_duplicate_items(frm);
+    if (
+      frm.doc.items &&
+      frm.doc.custom_delivery_note_item_duplicate &&
+      frm.doc.items.length != frm.doc.custom_delivery_note_item_duplicate.length
+    ) {
+      update_duplicate_items(frm);
+    }
   },
   onload: function (frm) {
     if (
