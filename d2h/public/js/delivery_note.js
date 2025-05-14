@@ -57,7 +57,7 @@ frappe.ui.form.on("Delivery Note", {
   onload: function (frm) {
     if (
       frappe.user_roles.includes("Store Dept") &&
-      !frappe.user_roles.includes("Administrator")
+      !frappe.user_roles.includes("Administrator") // just added for local testing
     ) {
       frm.set_df_property("accounting_dimensions_section", "hidden", true);
       frm.set_df_property("currency_and_price_list", "hidden", true);
