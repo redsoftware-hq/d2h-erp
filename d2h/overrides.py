@@ -116,7 +116,9 @@ def on_delete_purchase_receipt(doc, method):
     on_submit_purchase_receipt(doc, method)
 
 def sales_order_before_load(user):
-    if "Store Dept" in frappe.get_roles(user) and frappe.session.user != "Administrator":
+    user_roles = frappe.get_roles(user)
+    is_admin = "System Manager" in user_roles or user == "Administrator"
+    if "Store Dept" in user_roles and not is_admin:
         return """
             `tabSales Order`.name IN (
                 SELECT DISTINCT sii.sales_order
@@ -127,4 +129,4 @@ def sales_order_before_load(user):
             OR `tabSales Order`.custom_balance_status = 'Approved'
         """
     else:
-        ""
+        return ""
