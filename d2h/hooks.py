@@ -244,6 +244,12 @@ permission_query_conditions = {
 	"Sales Order": "d2h.overrides.sales_order_before_load",
 }
 
+# D2H-5: make default "Get Items" subtract Good-In-Transit qty (GIT-aware)
+override_whitelisted_methods = {
+	"erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_receipt": "d2h.get_items_overrides.make_purchase_receipt",
+	"erpnext.selling.doctype.sales_order.sales_order.make_delivery_note": "d2h.get_items_overrides.make_delivery_note",
+}
+
 app_include_js = "/assets/d2h/js/form.js"
 
 doctype_js = {"Purchase Receipt" : "public/js/purchase_receipt.js", "Purchase Order" : "public/js/purchase_order.js", "Delivery Note" : "public/js/delivery_note.js", "Sales Order" : "public/js/sales_order.js"}
