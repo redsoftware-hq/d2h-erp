@@ -6,3 +6,4 @@
 # Patches added in this section will be executed after doctypes are migrated
 d2h.patches.hide_po_financials_from_store_dept
 d2h.patches.hide_so_financials_from_store_dept
+d2h.patches.hide_stock_entry_valuation_from_store_dept
