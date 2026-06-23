@@ -244,6 +244,9 @@ permission_query_conditions = {
 	"Sales Order": "d2h.overrides.sales_order_before_load",
 }
 
+# D2H-6: keep Store Member role's access to standard stock reports durable
+after_migrate = ["d2h.setup.ensure_store_member_report_access"]
+
 # D2H-5: make default "Get Items" subtract Good-In-Transit qty (GIT-aware)
 override_whitelisted_methods = {
 	"erpnext.buying.doctype.purchase_order.purchase_order.make_purchase_receipt": "d2h.get_items_overrides.make_purchase_receipt",
