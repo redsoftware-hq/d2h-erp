@@ -60,7 +60,7 @@ def after_insert_purchase_receipt(doc, method):
 
 def validate_purchase_receipt(doc, method):
     user_roles = frappe.get_roles(frappe.session.user)
-    if "Store Dept" in user_roles and "Administrator" not in user_roles:
+    if "Store Dept" in user_roles and "System Manager" not in user_roles:
         for ind in range(len(doc.custom_item_duplicate)):
             duplicate_item = doc.custom_item_duplicate[ind]
             item = doc.items[ind]
@@ -90,7 +90,7 @@ def validate_purchase_receipt(doc, method):
 
 def validate_delivery_note(doc, method):
     user_roles = frappe.get_roles(frappe.session.user)
-    if "Store Dept" in user_roles and "Administrator" not in user_roles:
+    if "Store Dept" in user_roles and "System Manager" not in user_roles:
         for ind in range(len(doc.custom_delivery_note_item_duplicate)):
             duplicate_item = doc.custom_delivery_note_item_duplicate[ind]
             item = doc.items[ind]
