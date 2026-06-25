@@ -42,6 +42,7 @@ PERMS = {
     "Bin": {"read": 1},                  # functional: stock levels
     # transactions
     "Purchase Order": {"read": 1},                                   # read-only per spec
+    "Sales Order": {"read": 1},          # read-only: view orders allocated to the warehouse to deliver against
     "Purchase Receipt": {"read": 1, "write": 1, "create": 1, "submit": 1},
     "Delivery Note": {"read": 1, "write": 1, "create": 1, "submit": 1},
     "Stock Entry": {"read": 1, "write": 1, "create": 1, "submit": 1},
