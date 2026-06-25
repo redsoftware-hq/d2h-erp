@@ -244,6 +244,9 @@ permission_query_conditions = {
 	"Sales Order": "d2h.overrides.sales_order_before_load",
 }
 
+# D2H-6: keep Store Member role's access to standard stock reports durable
+after_migrate = ["d2h.setup.ensure_store_member_report_access"]
+
 app_include_js = "/assets/d2h/js/form.js"
 
 doctype_js = {"Purchase Receipt" : "public/js/purchase_receipt.js", "Purchase Order" : "public/js/purchase_order.js", "Delivery Note" : "public/js/delivery_note.js", "Sales Order" : "public/js/sales_order.js"}

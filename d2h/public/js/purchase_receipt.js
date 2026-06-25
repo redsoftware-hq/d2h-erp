@@ -4,8 +4,8 @@ frappe.ui.form.on("Purchase Receipt", {
       "change",
       'input[data-fieldname="qty"]',
       function () {
-        roles = frappe.user_roles;
-        if (roles.includes("Store Dept") && !roles.includes("Administrator")) {
+        const roles = frappe.user_roles;
+        if (roles.includes("Store Dept") && !roles.includes("System Manager")) {
           frm.doc.custom_item_duplicate.map((item) => {
             frm.doc.items.map((new_item) => {
               if (new_item.item_code == item.item_code) {
@@ -20,11 +20,32 @@ frappe.ui.form.on("Purchase Receipt", {
         }
       }
     );
+
+    // D2H-5: store users have the standard Items grid hidden, so items pulled via
+    // "Get Items From -> Purchase Order" land in a hidden table. Mirror them into
+    // the visible duplicate-items table so they actually appear (matches the
+    // Delivery Note flow).
+    if (
+      frappe.user_roles.includes("Store Dept") &&
+      !frappe.user_roles.includes("System Manager")
+    ) {
+      if (
+        frm.doc.items &&
+        frm.doc.custom_item_duplicate &&
+        !compareListsByKey(
+          frm.doc.items,
+          frm.doc.custom_item_duplicate,
+          "item_code"
+        )
+      ) {
+        update_duplicate_items(frm);
+      }
+    }
   },
   onload: function (frm) {
     if (
       frappe.user_roles.includes("Store Dept") &&
-      !frappe.user_roles.includes("Administrator")
+      !frappe.user_roles.includes("System Manager")
     ) {
       frm.set_df_property("sec_warehouse", "hidden", true);
       frm.set_df_property("items_section", "hidden", true);
@@ -43,3 +64,49 @@ frappe.ui.form.on("Purchase Receipt", {
     }
   },
 });
+
+frappe.ui.form.on("Purchase Receipt Item", {
+  item_code: function (frm) {
+    if (
+      frappe.user_roles.includes("Store Dept") &&
+      !frappe.user_roles.includes("System Manager")
+    ) {
+      update_duplicate_items(frm);
+    }
+  },
+});
+
+function update_duplicate_items(frm) {
+  frm.doc.custom_item_duplicate = [];
+  frm.refresh_field("custom_item_duplicate");
+  frm.doc.items.map((item) => {
+    const new_item = frm.add_child("custom_item_duplicate");
+    new_item.item_code = item.item_code;
+    new_item.qty = item.qty;
+    new_item.uom = item.uom;
+    new_item.base_rate = item.base_rate;
+    new_item.stock_uom = item.stock_uom;
+    new_item.conversion_factor = item.conversion_factor;
+    new_item.received_qty = item.received_qty;
+    new_item.serial_no = item.serial_no;
+    new_item.rejected_qty = item.rejected_qty;
+    new_item.purchase_order = item.purchase_order;
+    new_item.serial_and_batch_bundle = item.serial_and_batch_bundle;
+    new_item.rejected_serial_and_batch_bundle =
+      item.rejected_serial_and_batch_bundle;
+    new_item.use_serial_batch_fields = item.use_serial_batch_fields;
+  });
+  frm.refresh_field("custom_item_duplicate");
+}
+
+function compareListsByKey(list1, list2, key) {
+  if (list1.length !== list2.length) return false;
+
+  for (let i = 0; i < list1.length; i++) {
+    if (list1[i][key] !== list2[i][key]) {
+      return false;
+    }
+  }
+
+  return true;
+}

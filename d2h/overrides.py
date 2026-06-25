@@ -60,7 +60,7 @@ def after_insert_purchase_receipt(doc, method):
 
 def validate_purchase_receipt(doc, method):
     user_roles = frappe.get_roles(frappe.session.user)
-    if "Store Dept" in user_roles and "Administrator" not in user_roles:
+    if "Store Dept" in user_roles and "System Manager" not in user_roles:
         for ind in range(len(doc.custom_item_duplicate)):
             duplicate_item = doc.custom_item_duplicate[ind]
             item = doc.items[ind]
@@ -90,7 +90,7 @@ def validate_purchase_receipt(doc, method):
 
 def validate_delivery_note(doc, method):
     user_roles = frappe.get_roles(frappe.session.user)
-    if "Store Dept" in user_roles and "Administrator" not in user_roles:
+    if "Store Dept" in user_roles and "System Manager" not in user_roles:
         for ind in range(len(doc.custom_delivery_note_item_duplicate)):
             duplicate_item = doc.custom_delivery_note_item_duplicate[ind]
             item = doc.items[ind]
@@ -116,7 +116,9 @@ def on_delete_purchase_receipt(doc, method):
     on_submit_purchase_receipt(doc, method)
 
 def sales_order_before_load(user):
-    if "Store Dept" in frappe.get_roles(user) and frappe.session.user != "Administrator":
+    user_roles = frappe.get_roles(user)
+    is_admin = "System Manager" in user_roles or user == "Administrator"
+    if "Store Dept" in user_roles and not is_admin:
         return """
             `tabSales Order`.name IN (
                 SELECT DISTINCT sii.sales_order
@@ -127,4 +129,4 @@ def sales_order_before_load(user):
             OR `tabSales Order`.custom_balance_status = 'Approved'
         """
     else:
-        ""
+        return ""

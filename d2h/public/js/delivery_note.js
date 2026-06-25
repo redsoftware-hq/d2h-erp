@@ -5,7 +5,7 @@ frappe.ui.form.on("Delivery Note", {
       'input[data-fieldname="qty"]',
       function () {
         roles = frappe.user_roles;
-        if (roles.includes("Store Dept") && !roles.includes("Administrator")) {
+        if (roles.includes("Store Dept") && !roles.includes("System Manager")) {
           frm.doc.custom_item_duplicate.map((item) => {
             frm.doc.items.map((new_item) => {
               if (new_item.item_code == item.item_code) {
@@ -19,7 +19,7 @@ frappe.ui.form.on("Delivery Note", {
     );
     if (
       frappe.user_roles.includes("Store Dept") &&
-      !frappe.user_roles.includes("Administrator")
+      !frappe.user_roles.includes("System Manager")
     ) {
       if (
         frm.doc.items &&
@@ -37,7 +37,7 @@ frappe.ui.form.on("Delivery Note", {
   validate(frm) {
     if (
       frappe.user_roles.includes("Store Dept") &&
-      !frappe.user_roles.includes("Administrator")
+      !frappe.user_roles.includes("System Manager")
     ) {
       if (
         frm.doc.items &&
@@ -57,7 +57,7 @@ frappe.ui.form.on("Delivery Note", {
   onload: function (frm) {
     if (
       frappe.user_roles.includes("Store Dept") &&
-      !frappe.user_roles.includes("Administrator") // just added for local testing
+      !frappe.user_roles.includes("System Manager")
     ) {
       frm.set_df_property("accounting_dimensions_section", "hidden", true);
       frm.set_df_property("currency_and_price_list", "hidden", true);

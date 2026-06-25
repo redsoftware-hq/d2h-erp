@@ -4,3 +4,8 @@
 
 [post_model_sync]
 # Patches added in this section will be executed after doctypes are migrated
+d2h.patches.hide_po_financials_from_store_dept
+d2h.patches.hide_so_financials_from_store_dept
+d2h.patches.hide_stock_entry_valuation_from_store_dept
+d2h.patches.create_store_member_role
+d2h.patches.make_so_delivery_location_mandatory
